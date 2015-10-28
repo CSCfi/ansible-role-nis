@@ -2,6 +2,8 @@
 # defaults file for ansible-role-nis
 
 nis_domain: io
+#nis_server_address: "{{ hostvars[groups['install'][0]]['ansible_br_int']['ipv4']['address'] }}"
+nis_server_address: "10.1.1.2"
 nis_server: False
 nis_server_packages:
  - ypserv
