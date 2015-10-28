@@ -1,4 +1,4 @@
-# {{‚ansible_managed }}
+# {{ ansible_managed }}
 # /etc/yp.conf - ypbind configuration file
 # Valid entries are
 #
@@ -20,4 +20,4 @@
 #       none of them is rechable, try a broadcast call to
 #       find a server.
 #
-domain {{ nis_domain }} server {{ hostvars[groups['install'][0]['ansible_br_int']['ipv4']['address']] }} 
+domain {{ nis_domain }} server 10.1.1.2

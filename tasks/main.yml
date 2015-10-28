@@ -1,13 +1,14 @@
 ---
 # tasks file for ansible-role-nis
 
-- name: set ypservers
+- name: template in yp.conf on non-servers
   template: src=yp.conf.j2 dest=/etc/yp.conf
+  when: not nis_server
   notify: 
     - restart rpcbind
     - restart ypbind
 
-- name: nis server packages installed
+- name: install nis server packages
   yum: name={{ item }} state=latest
   with_items: nis_server_packages
   when: nis_server
@@ -15,14 +16,26 @@
     - restart rpcbind
     - restart ypbind
 
-- name: nis common packages installed
+- name: install nis common packages 
   yum: name={{ item }} state=latest
   with_items: nis_packages
   notify:
     - restart ypbind
   
-- name : set nsswitch
+- name : template in nsswitch - conditionals inside template
   template: src=nsswitch.conf.j2 dest=/etc/nsswitch.conf
   notify:
     - restart rpcbind 
     - restart ypbind
+
+- name: add NISDOMAIN to sysconfig/network
+  lineinfile: dest=/etc/sysconfig/network line="NISDOMAIN="{{ nis_domain }}"" backup=yes insertbefore=BOF
+  notify:
+    - restart rpcbind 
+    - restart ypbind
+
+- name: enable ypbind
+  service: name=ypbind enabled=yes
+
+- name: enable rhel-domainname 
+  service: rhel-domainname enabled=yes
