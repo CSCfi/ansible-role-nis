@@ -34,8 +34,13 @@
     - restart rpcbind 
     - restart ypbind
 
+- name: enable ypserv
+  service: name=ypserv enabled=yes
+  when: nis_server
+
 - name: enable ypbind
   service: name=ypbind enabled=yes
+  when: not nis_server
 
 - name: enable rhel-domainname 
-  service: rhel-domainname enabled=yes
+  service: name=rhel-domainname enabled=yes
