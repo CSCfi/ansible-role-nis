@@ -6,3 +6,8 @@
 
 - name: restart ypbind
   service: name=ypbind state=restarted
+  when: not nis_server
+
+- name: restart ypserv
+  service: name=ypserv state=restarted
+  when: nis_server
