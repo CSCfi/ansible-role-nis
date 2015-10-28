@@ -26,9 +26,17 @@
   
 - name : template in nsswitch - conditionals inside template
   template: src=nsswitch.conf.j2 dest=/etc/nsswitch.conf
+  when: not nis_server
   notify:
     - restart rpcbind 
     - restart ypbind
+
+- name : template in /var/yp/securenets
+  template: src=securenets.j2 dest=/var/yp/securenets
+  when: nis_server
+  notify:
+    - restart rpcbind 
+    - restart ypserv
 
 # TODO: If one changes nis_domain variable then sysconfig/network needs to be cleaned up manually
 - name: add NISDOMAIN to sysconfig/network 
