@@ -20,5 +20,4 @@
 #       none of them is rechable, try a broadcast call to
 #       find a server.
 #
-#domain {{ nis_domain }} server {{ hostvars['install']['ansible_eth0']['ipv4']['address'] }}
 domain {{ nis_domain }} server {{ nis_server_address }}
