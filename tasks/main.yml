@@ -1,2 +1,28 @@
 ---
 # tasks file for ansible-role-nis
+
+- name: set ypservers
+  template: src=yp.conf.j2 dest=/etc/yp.conf
+  notify: 
+    - restart rpcbind
+    - restart ypbind
+
+- name: nis server packages installed
+  yum: name={{ item }} state=latest
+  with_items: nis_server_packages
+  when: nis_server
+  notify:
+    - restart rpcbind
+    - restart ypbind
+
+- name: nis common packages installed
+  yum: name={{ item }} state=latest
+  with_items: nis_packages
+  notify:
+    - restart ypbind
+  
+- name : set nsswitch
+  template: src=nsswitch.conf.j2 dest=/etc/nsswitch.conf
+  notify:
+    - restart rpcbind 
+    - restart ypbind

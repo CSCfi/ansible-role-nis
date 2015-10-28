@@ -10,7 +10,8 @@ Requirements
 Role Variables
 --------------
 
-nis\_server: True / False
+   - nis\_server: True / False
+   - nis\_domain: yourNISdomain
 
 Dependencies
 ------------
@@ -32,3 +33,7 @@ MIT
 
 Author Information
 ------------------
+
+Inspiration from:
+
+    - https://github.com/CobraLab/ansible-playbooks

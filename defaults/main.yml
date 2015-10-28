@@ -1,2 +1,10 @@
 ---
 # defaults file for ansible-role-nis
+
+nis_domain: io
+nis_server: False
+nis_server_packages:
+ - ypserv
+nis_packages:
+ - ypbind
+ - yp-tools
