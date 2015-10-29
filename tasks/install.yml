@@ -46,6 +46,14 @@
     - restart ypbind
     - restart ypserv
 
+# Some more details in here: https://bugzilla.redhat.com/show_bug.cgi?id=827267
+- name: NetworkManager causes timeouts because dbus
+  service: name=NetworkManager enabled=no state=stopped
+  notify:
+    - restart rpcbind 
+    - restart ypbind
+    - restart ypserv
+
 - name: enable and start ypserv
   service: name=ypserv enabled=yes state=started
   when: nis_server
