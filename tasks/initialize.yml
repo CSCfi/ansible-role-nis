@@ -13,5 +13,7 @@
   when: nis_server and nis_initialize and not yppath.stat.isdir
 
 - name: do not export shadow hashes by setting MERGE_PASSWD=false in /var/yp/Makefile
-  lineinfile: dest=/var/yp/Makefile state=present regexp='^MERGE_PASSWD=true' line='MERGE_PASSWORD=false' validate='cd /var/yp; make' backup=yes
+  lineinfile: dest=/var/yp/Makefile state=present regexp='^MERGE_PASSWD=true' line='MERGE_PASSWD=false' backup=yes
   when: nis_server and nis_initialize
+  notify:
+    - restart ypserv
