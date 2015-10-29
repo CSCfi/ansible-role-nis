@@ -17,4 +17,3 @@
   when: nis_server and nis_initialize
   notify:
     - restart ypserv
-    - ypmake

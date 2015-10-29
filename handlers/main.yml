@@ -12,6 +12,7 @@
   service: name=ypserv state=restarted
   when: nis_server
 
-- name: ypmake
-  command: make all chdir=/var/yp
-  when: nis_server
+# TODO: This creates a bunch of files in /var/yp/ not in /var/yp/domainname/..
+#- name: ypmake
+#  command: make all chdir=/var/yp
+#  when: nis_server
