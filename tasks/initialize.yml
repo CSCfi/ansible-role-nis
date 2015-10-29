@@ -12,15 +12,8 @@
   command: ypinit -m {{ ansible_fqdn }}
   when: nis_server and nis_initialize and not yppath.stat.isdir
 
-- name: do not export shadow hashes by setting MERGE_PASSWD=false in /var/yp/Makefile
-  lineinfile: dest=/var/yp/Makefile state=present regexp='^MERGE_PASSWD=true' line='MERGE_PASSWD=false' backup=yes
-  when: nis_server and nis_initialize
-  notify:
-    - restart ypserv
-    - ypmake
-
-- name: do export the shadow.byname
-  lineinfile: dest=/var/yp/Makefile state=present regexp='all:  passwd group hosts rpc services netid protocols mail \\' line='all:  passwd group hosts rpc services netid protocols mail shadow \\' backup=yes
+- name: template in the Makefile
+  template: dest=/var/yp/Makefile src=Makefile.j2 backup=yes
   when: nis_server and nis_initialize
   notify:
     - restart ypserv
