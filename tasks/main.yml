@@ -2,6 +2,6 @@
 # tasks file for ansible-role-nis
 
 - include: install.yml
-  when: nis_enabled
+  when: nis_enabled and ansible_os_family == "RedHat"
 - include: initialize.yml
-  when: nis_initialize
+  when: nis_initialize and ansible_os_family == "RedHat"
