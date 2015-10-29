@@ -46,17 +46,17 @@
     - restart ypbind
     - restart ypserv
 
-- name: enable ypserv
-  service: name=ypserv enabled=yes
+- name: enable and start ypserv
+  service: name=ypserv enabled=yes state=started
   when: nis_server
   notify:
     - restart ypserv
 
-- name: enable ypbind
-  service: name=ypbind enabled=yes
+- name: enable and start ypbind
+  service: name=ypbind enabled=yes state=started
   when: not nis_server
 
-- name: enable rhel-domainname 
-  service: name=rhel-domainname enabled=yes
+- name: enable and start rhel-domainname 
+  service: name=rhel-domainname enabled=yes state=started
   notify:
     - restart ypserv
