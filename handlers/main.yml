@@ -11,3 +11,7 @@
 - name: restart ypserv
   service: name=ypserv state=restarted
   when: nis_server
+
+- name: ypmake
+  command: make all chdir=/var/yp
+  when: nis_server

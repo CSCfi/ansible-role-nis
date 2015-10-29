@@ -17,3 +17,11 @@
   when: nis_server and nis_initialize
   notify:
     - restart ypserv
+    - ypmake
+
+- name: do export the shadow.byname
+  lineinfile: dest=/var/yp/Makefile state=present regexp='all:  passwd group hosts rpc services netid protocols mail \\' line='all:  passwd group hosts rpc services netid protocols mail shadow \\' backup=yes
+  when: nis_server and nis_initialize
+  notify:
+    - restart ypserv
+    - ypmake
