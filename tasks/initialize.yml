@@ -6,8 +6,8 @@
   register: yppath
 
 - debug: msg="nis_domain already initialized"
-  when: yppath.stat.isdir is defined and p.stat.isdir
+  when: yppath.stat.isdir is defined and yppath.stat.isdir
 
 - name: initialize the master nis server
   command: ypinit -m {{ ansible_fqdn }}
-  when: nis_server and nis_initialize and not p.stat.isdir
+  when: nis_server and nis_initialize and not yppath.stat.isdir
