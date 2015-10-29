@@ -1,0 +1,13 @@
+---
+# tasks file for ansible-role-nis
+#
+- name: does the var/yp/sitename exist
+  stat: path=/var/yp/{{ nis_domain }} 
+  register: yppath
+
+- debug: msg="nis_domain already initialized"
+  when: yppath.stat.isdir is defined and p.stat.isdir
+
+- name: initialize the master nis server
+  command: ypinit -m {{ ansible_fqdn }}
+  when: nis_server and nis_initialize and not p.stat.isdir

@@ -1,0 +1,62 @@
+---
+# tasks file for ansible-role-nis
+
+- name: template in yp.conf on non-servers
+  template: src=yp.conf.j2 dest=/etc/yp.conf
+  when: not nis_server
+  notify: 
+    - restart rpcbind
+    - restart ypbind
+
+- name: install nis server packages
+  yum: name={{ item }} state=latest
+  with_items: nis_server_packages
+  when: nis_server
+  notify:
+    - restart rpcbind
+    - restart ypbind
+    - restart ypserv
+
+- name: install nis common packages 
+  yum: name={{ item }} state=latest
+  with_items: nis_packages
+  notify:
+    - restart ypbind
+    - restart ypserv
+  
+- name : template in nsswitch - conditionals inside template
+  template: src=nsswitch.conf.j2 dest=/etc/nsswitch.conf
+  when: not nis_server
+  notify:
+    - restart rpcbind 
+    - restart ypbind
+
+- name : template in /var/yp/securenets
+  template: src=securenets.j2 dest=/var/yp/securenets
+  when: nis_server
+  notify:
+    - restart rpcbind 
+    - restart ypserv
+
+# TODO: If one changes nis_domain variable then sysconfig/network needs to be cleaned up manually
+- name: add NISDOMAIN to sysconfig/network 
+  lineinfile: dest=/etc/sysconfig/network line="NISDOMAIN="{{ nis_domain }}"" backup=yes insertbefore=EOF regexp="NISDOMAIN="{{ nis_domain }}""
+  notify:
+    - restart rpcbind 
+    - restart ypbind
+    - restart ypserv
+
+- name: enable and start ypserv
+  service: name=ypserv enabled=yes state=started
+  when: nis_server
+  notify:
+    - restart ypserv
+
+- name: enable and start ypbind
+  service: name=ypbind enabled=yes state=started
+  when: not nis_server
+
+- name: enable and start rhel-domainname 
+  service: name=rhel-domainname enabled=yes state=started
+  notify:
+    - restart ypserv

@@ -10,8 +10,14 @@ Requirements
 Role Variables
 --------------
 
+   - nis\_enabled: True
+      - If set to False don't run this role
+   - nis\_initialize: True
+      - initialize runs "ypinit -m servername"
    - nis\_server: True / False
+      - Sets up the master, defaults to only setting up the client
    - nis\_domain: yourNISdomain
+
 
 Dependencies
 ------------
