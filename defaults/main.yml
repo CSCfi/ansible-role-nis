@@ -9,7 +9,12 @@ nis_server_address: "10.1.1.2"
 nis_server: False
 nis_server_packages:
  - ypserv
+nis_server_daemons:
+ - ypserv
+ - yppasswdd
 nis_packages:
  - ypbind
  - yp-tools
+
 nis_initialize: True
+

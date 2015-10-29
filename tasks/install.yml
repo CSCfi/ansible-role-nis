@@ -54,9 +54,10 @@
     - restart ypbind
     - restart ypserv
 
-- name: enable and start ypserv
-  service: name=ypserv enabled=yes state=started
+- name: enable and start yp server daemons
+  service: name={{ item }} enabled=yes state=started
   when: nis_server
+  with_items: nis_server_daemons
   notify:
     - restart ypserv
 
