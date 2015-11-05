@@ -46,6 +46,12 @@
     - restart ypbind
     - restart ypserv
 
+- name: enable and start rhel-domainname 
+  service: name=rhel-domainname enabled=yes state=started
+  notify:
+    - restart ypserv
+    - restart ypbind
+
 # Some more details in here: https://bugzilla.redhat.com/show_bug.cgi?id=827267
 - name: NetworkManager causes timeouts because dbus
   service: name=NetworkManager enabled=no state=stopped
@@ -64,8 +70,3 @@
 - name: enable and start ypbind
   service: name=ypbind enabled=yes state=started
   when: not nis_server
-
-- name: enable and start rhel-domainname 
-  service: name=rhel-domainname enabled=yes state=started
-  notify:
-    - restart ypserv
