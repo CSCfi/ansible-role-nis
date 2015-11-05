@@ -2,7 +2,7 @@
 # defaults file for ansible-role-nis
 
 nis_enabled: True
-nis_domain: io
+nis_domain: fgci.csc.fi
 #nis_server_address: "{{ hostvars[groups['install'][0]]['ansible_br_int']['ipv4']['address'] }}"
 nis_secure_net: "255.0.0.0 10.0.0.0"
 nis_server_address: "10.1.1.2"
