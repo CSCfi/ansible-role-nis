@@ -1,0 +1,2 @@
+# {{ ansible_managed }}
+make -C /var/yp &>/dev/null

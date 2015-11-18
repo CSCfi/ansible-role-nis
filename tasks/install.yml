@@ -46,6 +46,10 @@
     - restart ypbind
     - restart ypserv
 
+- name : template in yp Make cronjob 
+  template: src=yp.cron.j2 dest=/etc/cron.hourly/yp.cron mode=0755 owner=root group=root backup=no
+  when: nis_server
+
 - name: enable and start rhel-domainname 
   service: name=rhel-domainname enabled=yes state=started
   notify:
