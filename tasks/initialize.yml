@@ -1,19 +1,18 @@
 ---
 # tasks file for ansible-role-nis
 #
-- name: does the var/yp/sitename exist
-  stat: path=/var/yp/{{ nis_domain }} 
-  register: yppath
 
-#- debug: msg="nis_domain already initialized"
-#  when: yppath.stat.isdir is defined and yppath.stat.isdir
-
-#- name: initialize the master nis server
-#  command: ypinit -m {{ ansible_fqdn }}
-#  when: nis_server and nis_initialize and not yppath.stat.isdir
+- name: template in a patched ypinit script that has the ctrl d prompt disabled that creates /var/yp/.csc
+  template: src=ypinit_csc.j2 dest=/usr/lib64/yp/ypinit_csc mode=0755 owner=root group=root backup=no
+  when: nis_initialize and nis_server
 
 - name: template in the Makefile
   template: dest=/var/yp/Makefile src=Makefile.j2 backup=yes
   when: nis_server and nis_initialize
   notify:
     - restart ypserv
+
+- name: initialize the master nis server with ypinit_csc if /var/yp/.csc does not exist
+  command: /usr/lib64/yp/ypinit_csc -m creates=/var/yp/.csc
+  when: nis_server and nis_initialize
+
