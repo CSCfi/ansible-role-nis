@@ -74,3 +74,6 @@
 - name: enable and start ypbind
   service: name=ypbind enabled=yes state=started
   when: not nis_server
+
+- name: enable and start nscd
+  service: name=nscd enabled=yes state=started
