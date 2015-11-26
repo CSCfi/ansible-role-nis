@@ -15,6 +15,7 @@ nis_server_daemons:
 nis_packages:
  - ypbind
  - yp-tools
+ - nscd
 
 nis_initialize: True
 
