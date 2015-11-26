@@ -137,7 +137,7 @@ all:  passwd group hosts rpc services netid protocols mail shadow \
 #                                                                      #
 ########################################################################
 
-DBLOAD = $(YPBINDIR)/makedbm -c -m `$(YPBINDIR)/yphelper --hostname`
+DBLOAD = $(YPBINDIR)/makedbm -c -m `$(YPBINDIR)/yphelper --hostname` --no-limit-check
 MKNETID = $(YPBINDIR)/mknetid
 YPPUSH = $(YPSBINDIR)/yppush $(YPPUSH_ARGS)
 MERGER = $(YPBINDIR)/yphelper
