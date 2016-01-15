@@ -55,6 +55,7 @@
   notify:
     - restart ypserv
     - restart ypbind
+  when: ansible_virtualization_type != "docker"
 
 # Some more details in here: https://bugzilla.redhat.com/show_bug.cgi?id=827267
 - name: NetworkManager causes timeouts because dbus
@@ -63,6 +64,7 @@
     - restart rpcbind 
     - restart ypbind
     - restart ypserv
+  when: ansible_virtualization_type != "docker"
 
 - name: enable and start yp server daemons
   service: name={{ item }} enabled=yes state=started
