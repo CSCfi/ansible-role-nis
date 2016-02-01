@@ -23,26 +23,26 @@
   notify:
     - restart ypbind
     - restart ypserv
-  
+
 - name : template in nsswitch - conditionals inside template
   template: src=nsswitch.conf.j2 dest=/etc/nsswitch.conf
-  when: not nis_server
+  when: not nis_server and nis_manage_nsswitch
   notify:
-    - restart rpcbind 
+    - restart rpcbind
     - restart ypbind
 
 - name : template in /var/yp/securenets
   template: src=securenets.j2 dest=/var/yp/securenets
   when: nis_server
   notify:
-    - restart rpcbind 
+    - restart rpcbind
     - restart ypserv
 
 # TODO: If one changes nis_domain variable then sysconfig/network needs to be cleaned up manually
 - name: add NISDOMAIN to sysconfig/network 
   lineinfile: dest=/etc/sysconfig/network line="NISDOMAIN="{{ nis_domain }}"" backup=yes insertbefore=EOF regexp="NISDOMAIN="{{ nis_domain }}""
   notify:
-    - restart rpcbind 
+    - restart rpcbind
     - restart ypbind
     - restart ypserv
 
@@ -61,7 +61,7 @@
 - name: NetworkManager causes timeouts because dbus
   service: name=NetworkManager enabled=no state=stopped
   notify:
-    - restart rpcbind 
+    - restart rpcbind
     - restart ypbind
     - restart ypserv
   when: ansible_virtualization_type != "docker"

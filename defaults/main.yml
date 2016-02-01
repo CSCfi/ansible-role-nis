@@ -17,5 +17,6 @@ nis_packages:
  - yp-tools
  - nscd
 
+nis_manage_nsswitch: True
 nis_initialize: True
 
