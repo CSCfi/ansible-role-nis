@@ -11,6 +11,10 @@ Requirements
 Role Variables
 --------------
 
+see defaults/main.yml.
+
+Some of them:
+
    - nis\_enabled: True
       - If set to False don't run this role
    - nis\_initialize: True
@@ -18,6 +22,8 @@ Role Variables
    - nis\_server: True / False
       - Sets up the master, defaults to only setting up the client
    - nis\_domain: yourNISdomain
+
+It's also possible to disable configuration of nsswitch and nscd.
 
 
 Dependencies

@@ -129,8 +129,8 @@ galaxy_info:
   #- development
   #- monitoring
   #- networking
-  - packaging
-  #- system
+  #- packaging
+  - system
   #- web
 dependencies: []
   # List your role dependencies here, one per line.
