@@ -40,7 +40,12 @@
 
 # TODO: If one changes nis_domain variable then sysconfig/network needs to be cleaned up manually
 - name: add NISDOMAIN to sysconfig/network 
-  lineinfile: dest=/etc/sysconfig/network line="NISDOMAIN="{{ nis_domain }}"" backup=yes insertbefore=EOF regexp="NISDOMAIN="{{ nis_domain }}""
+  lineinfile: 
+        dest=/etc/sysconfig/network 
+        line="NISDOMAIN="{{ nis_domain }}"" 
+        regexp="NISDOMAIN="{{ nis_domain }}""
+        backup=yes 
+        insertbefore=EOF 
   notify:
     - restart rpcbind
     - restart ypbind
@@ -59,12 +64,12 @@
 
 # Some more details in here: https://bugzilla.redhat.com/show_bug.cgi?id=827267
 - name: NetworkManager causes timeouts because dbus
-  service: name=NetworkManager enabled=no state=stopped
+  service: name=NetworkManager enabled={{ nis_nm_enabled }} state={{ nis_nm_state }}
   notify:
     - restart rpcbind
     - restart ypbind
     - restart ypserv
-  when: ansible_virtualization_type != "docker"
+  when: ( ansible_virtualization_type != "docker" and nis_manage_networkmanager )
 
 - name: enable and start yp server daemons
   service: name={{ item }} enabled=yes state=started
@@ -78,4 +83,5 @@
   when: not nis_server
 
 - name: enable and start nscd
-  service: name=nscd enabled=yes state=started
+  service: name=nscd enabled={{ nis_nscd_enabled }} state={{ nis_nscd_state }}
+  when: nis_manage_nscd

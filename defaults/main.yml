@@ -18,5 +18,11 @@ nis_packages:
  - nscd
 
 nis_manage_nsswitch: True
+nis_manage_nscd: True
+nis_nscd_enabled: "yes"
+nis_nscd_state: "started"
+nis_manage_networkmanager: True
+nis_nm_enabled: "no"
+nis_nm_state: "stopped"
 nis_initialize: True
 
