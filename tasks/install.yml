@@ -62,6 +62,10 @@
     - restart ypbind
   when: ansible_virtualization_type != "docker"
 
+- name: Check if NetworkManager is installed
+  stat: path=/usr/lib/systemd/system/NetworkManager.service
+  register: nm
+
 # Some more details in here: https://bugzilla.redhat.com/show_bug.cgi?id=827267
 - name: NetworkManager causes timeouts because dbus
   service: name=NetworkManager enabled={{ nis_nm_enabled }} state={{ nis_nm_state }}
@@ -69,7 +73,7 @@
     - restart rpcbind
     - restart ypbind
     - restart ypserv
-  when: ( ansible_virtualization_type != "docker" and nis_manage_networkmanager )
+  when: ( ansible_virtualization_type != "docker" and nis_manage_networkmanager ) and nm.stat.exists
 
 - name: enable and start yp server daemons
   service: name={{ item }} enabled=yes state=started
