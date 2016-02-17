@@ -4,7 +4,7 @@
 nis_enabled: True
 nis_domain: fgci.csc.fi
 #nis_server_address: "{{ hostvars[groups['install'][0]]['ansible_br_int']['ipv4']['address'] }}"
-nis_secure_net: "255.0.0.0 10.0.0.0"
+nis_secure_net: "255.255.0.0 10.1.0.0"
 nis_server_address: "10.1.1.2"
 nis_server: False
 nis_server_packages:
@@ -25,4 +25,5 @@ nis_manage_networkmanager: True
 nis_nm_enabled: "no"
 nis_nm_state: "stopped"
 nis_initialize: True
-
+nis_minuid: 900
+nis_mingid: 900

@@ -40,8 +40,11 @@ YPPUSH_ARGS =
 # MINGID is the lowest gid that will be included in the group maps.
 # You can either set values directly (e.g. MINUID=1000) or pick up
 # current values from /etc/login.defs
-MINUID=$(shell TMP=`egrep '^UID_MIN\s+[0-9]+' /etc/login.defs|sed -e 's/^UID_MIN//'` ; [ -n "$$TMP" ] && echo "$$TMP" || echo 1000)
-MINGID=$(shell TMP=`egrep '^GID_MIN\s+[0-9]+' /etc/login.defs|sed -e 's/^GID_MIN//'` ; [ -n "$$TMP" ] && echo "$$TMP" || echo 1000)
+#MINUID=$(shell TMP=`egrep '^UID_MIN\s+[0-9]+' /etc/login.defs|sed -e 's/^UID_MIN//'` ; [ -n "$$TMP" ] && echo "$$TMP" || echo 1000)
+#MINGID=$(shell TMP=`egrep '^GID_MIN\s+[0-9]+' /etc/login.defs|sed -e 's/^GID_MIN//'` ; [ -n "$$TMP" ] && echo "$$TMP" || echo 1000)
+
+MINUID={{ nis_minuid }}
+MINGID={{ nis_mingid }}
 
 # Don't export this uid/guid (nfsnobody).
 # Set to 0 if you want to
