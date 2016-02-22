@@ -11,7 +11,7 @@ Requirements
 Role Variables
 --------------
 
-see defaults/main.yml.
+See defaults/main.yml
 
 Some of them:
 
