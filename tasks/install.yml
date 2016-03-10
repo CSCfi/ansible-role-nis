@@ -41,11 +41,11 @@
 # TODO: If one changes nis_domain variable then sysconfig/network needs to be cleaned up manually
 - name: add NISDOMAIN to sysconfig/network 
   lineinfile: 
-        dest=/etc/sysconfig/network 
-        line="NISDOMAIN="{{ nis_domain }}"" 
-        regexp="NISDOMAIN="{{ nis_domain }}""
+        "dest=/etc/sysconfig/network 
+        line='NISDOMAIN={{ nis_domain }}'
+        regexp='NISDOMAIN={{ nis_domain }}'
         backup=yes 
-        insertbefore=EOF 
+        insertbefore=EOF"
   notify:
     - restart rpcbind
     - restart ypbind
