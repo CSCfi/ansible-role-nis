@@ -42,8 +42,8 @@
 - name: add NISDOMAIN to sysconfig/network 
   lineinfile: 
         "dest=/etc/sysconfig/network 
-        line='NISDOMAIN={{ nis_domain }}'
-        regexp='NISDOMAIN={{ nis_domain }}'
+        regexp='NISDOMAIN=.*'
+        line='NISDOMAIN=\"{{ nis_domain }}\"'
         backup=yes 
         insertbefore=EOF"
   notify:
