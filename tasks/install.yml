@@ -10,7 +10,7 @@
 
 - name: install nis server packages
   yum: name={{ item }} state=latest
-  with_items: nis_server_packages
+  with_items: "{{ nis_server_packages }}"
   when: nis_server
   notify:
     - restart rpcbind
@@ -19,7 +19,7 @@
 
 - name: install nis common packages 
   yum: name={{ item }} state=latest
-  with_items: nis_packages
+  with_items: "{{ nis_packages }}"
   notify:
     - restart ypbind
     - restart ypserv
@@ -78,7 +78,7 @@
 - name: enable and start yp server daemons
   service: name={{ item }} enabled=yes state=started
   when: nis_server
-  with_items: nis_server_daemons
+  with_items: "{{ nis_server_daemons }}"
   notify:
     - restart ypserv
 
