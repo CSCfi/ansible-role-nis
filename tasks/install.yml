@@ -2,14 +2,18 @@
 # tasks file for ansible-role-nis
 
 - name: template in yp.conf on non-servers
-  template: src=yp.conf.j2 dest=/etc/yp.conf
+  template:
+    src: yp.conf.j2
+    dest: /etc/yp.conf
   when: not nis_server
-  notify: 
+  notify:
     - restart rpcbind
     - restart ypbind
 
 - name: install nis server packages
-  yum: name={{ item }} state=latest
+  package:
+    name: "{{ item }}"
+    state: present
   with_items: "{{ nis_server_packages }}"
   when: nis_server
   notify:
@@ -18,21 +22,27 @@
     - restart ypserv
 
 - name: install nis common packages 
-  yum: name={{ item }} state=latest
+  package:
+    name: "{{ item }}"
+    state: present
   with_items: "{{ nis_packages }}"
   notify:
     - restart ypbind
     - restart ypserv
 
 - name : template in nsswitch - conditionals inside template
-  template: src=nsswitch.conf.j2 dest=/etc/nsswitch.conf
+  template:
+    src: nsswitch.conf.j2
+    dest: /etc/nsswitch.conf
   when: not nis_server and nis_manage_nsswitch
   notify:
     - restart rpcbind
     - restart ypbind
 
 - name : template in /var/yp/securenets
-  template: src=securenets.j2 dest=/var/yp/securenets
+  template:
+    src: securenets.j2
+    dest: /var/yp/securenets
   when: nis_server
   notify:
     - restart rpcbind
@@ -40,52 +50,76 @@
 
 # TODO: If one changes nis_domain variable then sysconfig/network needs to be cleaned up manually
 - name: add NISDOMAIN to sysconfig/network 
-  lineinfile: 
-        "dest=/etc/sysconfig/network 
-        regexp='NISDOMAIN=.*'
-        line='NISDOMAIN=\"{{ nis_domain }}\"'
-        backup=yes 
-        insertbefore=EOF"
+  lineinfile:
+    dest: /etc/sysconfig/network
+    regexp: 'NISDOMAIN=.*'
+    line: 'NISDOMAIN=\"{{ nis_domain }}\"'
+    backup: yes
+    insertbefore: EOF
   notify:
     - restart rpcbind
     - restart ypbind
     - restart ypserv
 
 - name : template in yp Make cronjob 
-  template: src=yp.cron.j2 dest=/etc/cron.hourly/yp.cron mode=0755 owner=root group=root backup=no
+  template:
+    src: yp.cron.j2
+    dest: /etc/cron.hourly/yp.cron
+    mode: 0755
+    owner: root
+    group: root
+    backup: no
   when: nis_server
 
 - name: enable and start rhel-domainname 
-  service: name=rhel-domainname enabled=yes state=started
+  service:
+    name: rhel-domainname
+    enabled: yes
+    state: started
   notify:
     - restart ypserv
     - restart ypbind
   when: ansible_virtualization_type != "docker"
 
 - name: Check if NetworkManager is installed
-  stat: path=/usr/lib/systemd/system/NetworkManager.service
-  register: nm
+  stat: 
+    path: /usr/lib/systemd/system/NetworkManager.service
+  register: reg_nm
 
 # Some more details in here: https://bugzilla.redhat.com/show_bug.cgi?id=827267
 - name: NetworkManager causes timeouts because dbus
-  service: name=NetworkManager enabled={{ nis_nm_enabled }} state={{ nis_nm_state }}
+  service:
+    name: NetworkManager
+    enabled: "{{ nis_nm_enabled }}"
+    state: "{{ nis_nm_state }}"
   notify:
     - restart rpcbind
     - restart ypbind
     - restart ypserv
-  when: ( ansible_virtualization_type != "docker" and nis_manage_networkmanager ) and nm.stat.exists
+  when: 
+    - ( ansible_virtualization_type != "docker" and nis_manage_networkmanager ) 
+    - reg_nm.stat.exists
 
 - name: enable and start yp server daemons
-  service: name={{ item }} enabled=yes state=started
+  service:
+    name: "{{ item }}"
+    enabled: yes
+    state: started
   when: nis_server
   with_items: "{{ nis_server_daemons }}"
   notify:
     - restart ypserv
 
 - name: enable and start ypbind
-  service: name=ypbind enabled=yes state=started
+  service:
+    name: ypbind
+    enabled: yes
+    state: started
   when: not nis_server
 
 - name: enable and start nscd
-  service: name=nscd enabled={{ nis_nscd_enabled }} state={{ nis_nscd_state }}
+  service:
+    name: nscd
+    enabled: "{{ nis_nscd_enabled }}"
+    state: "{{ nis_nscd_state }}"
   when: nis_manage_nscd
