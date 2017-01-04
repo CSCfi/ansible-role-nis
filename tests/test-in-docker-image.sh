@@ -12,8 +12,8 @@ ANSIBLE_VERSION=${3:-}
 ANSIBLE_VAR=""
 ANSIBLE_INVENTORY="tests/inventory"
 ANSIBLE_PLAYBOOk="tests/test.yml"
-#ANSIBLE_LOG_LEVEL=""
-ANSIBLE_LOG_LEVEL="-vvv"
+ANSIBLE_LOG_LEVEL=""
+#ANSIBLE_LOG_LEVEL="-vvv"
 APACHE_CTL="apache2ctl"
 
 # if there wasn't sudo then ansible couldn't use it
@@ -119,13 +119,15 @@ function test_playbook(){
 }
 function extra_tests(){
 
-    ${APACHE_CTL} configtest || (echo "php --version was failed" && exit 100 )
+#    ${APACHE_CTL} configtest || (echo "php --version was failed" && exit 100 )
+     echo "TEST: cat /etc/sysconfig/network"
+     cat /etc/sysconfig/network
 }
 
 
 set -e
 function main(){
-    install_os_deps
+#    install_os_deps
 #    install_ansible_devel
     show_version
 #    tree_list
@@ -134,7 +136,7 @@ function main(){
     test_playbook_syntax
     test_playbook
     test_playbook_check
-#    extra_tests
+    extra_tests
 
 }
 
