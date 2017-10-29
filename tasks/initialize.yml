@@ -24,4 +24,4 @@
 - name: initialize the master nis server with ypinit_csc if /var/yp/.csc does not exist
   command: /usr/lib64/yp/ypinit_csc -m creates=/var/yp/.csc
   when: nis_server and nis_initialize and ansible_virtualization_type != "docker"
-...
+
