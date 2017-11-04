@@ -123,3 +123,4 @@
     enabled: "{{ nis_nscd_enabled }}"
     state: "{{ nis_nscd_state }}"
   when: nis_manage_nscd
+
