@@ -53,7 +53,7 @@
   lineinfile:
     dest: /etc/sysconfig/network
     regexp: 'NISDOMAIN=.*'
-    line: 'NISDOMAIN=\"{{ nis_domain }}\"'
+    line: 'NISDOMAIN={{ nis_domain }}'
     backup: yes
     insertbefore: EOF
   notify:
