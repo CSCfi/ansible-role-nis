@@ -117,6 +117,10 @@
     line: 'NISTIMEOUT={{ nis_ypbind_timeout }}'
     backup: no
     insertbefore: EOF
+    create: yes
+    owner: root
+    mode: "0644"
+    group: root
   when: not nis_server 
 
 - name: enable and start ypbind
