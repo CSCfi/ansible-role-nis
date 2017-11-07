@@ -110,6 +110,15 @@
   notify:
     - restart ypserv
 
+- name: Set sane timeout for ypbind
+  lineinfile:  
+    dest: /etc/sysconfig/ypbind
+    regexp: 'NISTIMEOUT=.*'
+    line: 'NISTIMEOUT={{ nis_ypbind_timeout }}'
+    backup: no
+    insertbefore: EOF
+  when: not nis_server 
+
 - name: enable and start ypbind
   service:
     name: ypbind

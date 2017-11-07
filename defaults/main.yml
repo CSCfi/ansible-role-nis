@@ -25,3 +25,4 @@ nis_manage_networkmanager: True
 nis_nm_enabled: "no"
 nis_nm_state: "stopped"
 nis_initialize: True
+nis_ypbind_timeout: 180
