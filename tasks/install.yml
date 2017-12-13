@@ -21,7 +21,7 @@
     - restart ypbind
     - restart ypserv
 
-- name: install nis common packages 
+- name: install nis common packages
   package:
     name: "{{ item }}"
     state: present
@@ -49,19 +49,23 @@
     - restart ypserv
 
 # TODO: If one changes nis_domain variable then sysconfig/network needs to be cleaned up manually
-- name: add NISDOMAIN to sysconfig/network 
+- name: add NISDOMAIN to sysconfig/network
   lineinfile:
     dest: /etc/sysconfig/network
     regexp: 'NISDOMAIN=.*'
     line: 'NISDOMAIN={{ nis_domain }}'
     backup: yes
     insertbefore: EOF
+    create: yes
+    group: root
+    owner: root
+    mode: 0644
   notify:
     - restart rpcbind
     - restart ypbind
     - restart ypserv
 
-- name : template in yp Make cronjob 
+- name : template in yp Make cronjob
   template:
     src: yp.cron.j2
     dest: /etc/cron.hourly/yp.cron
@@ -71,7 +75,7 @@
     backup: no
   when: nis_server
 
-- name: enable and start rhel-domainname 
+- name: enable and start rhel-domainname
   service:
     name: rhel-domainname
     enabled: yes
@@ -82,7 +86,7 @@
   when: ansible_virtualization_type != "docker"
 
 - name: Check if NetworkManager is installed
-  stat: 
+  stat:
     path: /usr/lib/systemd/system/NetworkManager.service
   register: reg_nm
 
@@ -96,8 +100,8 @@
     - restart rpcbind
     - restart ypbind
     - restart ypserv
-  when: 
-    - ( ansible_virtualization_type != "docker" and nis_manage_networkmanager ) 
+  when:
+    - ( ansible_virtualization_type != "docker" and nis_manage_networkmanager )
     - reg_nm.stat.exists
 
 - name: enable and start yp server daemons
@@ -111,7 +115,7 @@
     - restart ypserv
 
 - name: Set sane timeout for ypbind
-  lineinfile:  
+  lineinfile:
     dest: /etc/sysconfig/ypbind
     regexp: 'NISTIMEOUT=.*'
     line: 'NISTIMEOUT={{ nis_ypbind_timeout }}'
@@ -121,7 +125,7 @@
     owner: root
     mode: "0644"
     group: root
-  when: not nis_server 
+  when: not nis_server
 
 - name: enable and start ypbind
   service:
