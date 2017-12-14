@@ -10,6 +10,33 @@
     - restart rpcbind
     - restart ypbind
 
+chcon -h system_u:object_r:passwd_file_t:s0 /etc/passwd 
+chcon -h system_u:object_r:shadow_t:s0 /etc/shadow 
+
+
+
+- name: set sensibe SELinux context on /etc/passwd
+  file:
+    path: "/etc/passwd"
+    mode: 0644 
+    owner: "root"    
+    group: "root"
+    seuser: "system_u"
+    serole: "object_r"
+    setype: "passwd_file_t"
+    state: present
+
+- name: set sensibe SELinux context on /etc/passwd
+  file:
+    path: "/etc/shadow"
+    mode: 0000
+    owner: "root"    
+    group: "root"
+    seuser: "system_u"
+    serole: "object_r"
+    setype: "shadow_t"
+    state: present
+
 - name: install nis server packages
   package:
     name: "{{ item }}"
