@@ -19,7 +19,7 @@
     seuser: "system_u"
     serole: "object_r"
     setype: "passwd_file_t"
-    state: present
+    state: file
 
 - name: set sensibe SELinux context on /etc/passwd
   file:
@@ -30,7 +30,7 @@
     seuser: "system_u"
     serole: "object_r"
     setype: "shadow_t"
-    state: present
+    state: file
 
 - name: install nis server packages
   package:
