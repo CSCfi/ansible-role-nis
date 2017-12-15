@@ -10,28 +10,6 @@
     - restart rpcbind
     - restart ypbind
 
-- name: set sensibe SELinux context on /etc/passwd
-  file:
-    path: "/etc/passwd"
-    mode: 0644
-    owner: "root"
-    group: "root"
-    seuser: "system_u"
-    serole: "object_r"
-    setype: "passwd_file_t"
-    state: file
-
-- name: set sensibe SELinux context on /etc/shadow
-  file:
-    path: "/etc/shadow"
-    mode: 0000
-    owner: "root"
-    group: "root"
-    seuser: "system_u"
-    serole: "object_r"
-    setype: "shadow_t"
-    state: file
-
 - name: Fix SELinux context on /etc/password
   command: "/usr/bin/chcon -h system_u:object_r:passwd_file_t:s0 /etc/passwd"
 
