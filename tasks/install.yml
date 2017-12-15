@@ -10,6 +10,12 @@
     - restart rpcbind
     - restart ypbind
 
+- name: Fix SELinux context on /etc/password
+  command: "/usr/bin/chcon -h system_u:object_r:passwd_file_t:s0 /etc/passwd"
+
+- name: Fix SELinux context on /etc/shadow
+  command: "/usr/bin/chcon -h system_u:object_r:shadow_t:s0 /etc/shadow"
+
 - name: install nis server packages
   package:
     name: "{{ item }}"
