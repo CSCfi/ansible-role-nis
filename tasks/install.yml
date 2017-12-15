@@ -21,7 +21,7 @@
     setype: "passwd_file_t"
     state: file
 
-- name: set sensibe SELinux context on /etc/passwd
+- name: set sensibe SELinux context on /etc/shadow
   file:
     path: "/etc/shadow"
     mode: 0000
