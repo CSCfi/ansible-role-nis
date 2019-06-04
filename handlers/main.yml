@@ -6,11 +6,11 @@
 
 - name: restart ypbind
   service: name=ypbind state=restarted
-  when: not nis_server
+  when: not nis_server|bool
 
 - name: restart ypserv
   service: name=ypserv state=restarted
-  when: nis_server
+  when: nis_server|bool
 
 # TODO: This creates a bunch of files in /var/yp/ not in /var/yp/domainname/..
 #- name: ypmake

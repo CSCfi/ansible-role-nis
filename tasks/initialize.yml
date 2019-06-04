@@ -10,18 +10,18 @@
     owner: root
     group: root
     backup: no
-  when: nis_initialize and nis_server
+  when: nis_initialize|bool and nis_server|bool
 
 - name: template in the Makefile
   template:
     dest: /var/yp/Makefile
     src: Makefile.j2
     backup: yes
-  when: nis_server and nis_initialize
+  when: nis_server|bool and nis_initialize|bool
   notify:
     - restart ypserv
 
 - name: initialize the master nis server with ypinit_csc if /var/yp/.csc does not exist
   command: /usr/lib64/yp/ypinit_csc -m creates=/var/yp/.csc
-  when: nis_server and nis_initialize and ansible_virtualization_type != "docker"
+  when: nis_server|bool and nis_initialize|bool and ansible_virtualization_type != "docker"
 

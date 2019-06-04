@@ -5,7 +5,7 @@
   template:
     src: yp.conf.j2
     dest: /etc/yp.conf
-  when: not nis_server
+  when: not nis_server|bool
   notify:
     - restart rpcbind
     - restart ypbind
@@ -21,7 +21,7 @@
     name: "{{ item }}"
     state: present
   with_items: "{{ nis_server_packages }}"
-  when: nis_server
+  when: nis_server|bool
   notify:
     - restart rpcbind
     - restart ypbind
@@ -40,7 +40,7 @@
   template:
     src: nsswitch.conf.j2
     dest: /etc/nsswitch.conf
-  when: not nis_server and nis_manage_nsswitch
+  when: not nis_server|bool and nis_manage_nsswitch|bool
   notify:
     - restart rpcbind
     - restart ypbind
@@ -49,7 +49,7 @@
   template:
     src: securenets.j2
     dest: /var/yp/securenets
-  when: nis_server
+  when: nis_serveri|bool
   notify:
     - restart rpcbind
     - restart ypserv
@@ -79,7 +79,7 @@
     owner: root
     group: root
     backup: no
-  when: nis_server
+  when: nis_server|bool
 
 - name: enable and start rhel-domainname
   service:
@@ -107,7 +107,7 @@
     - restart ypbind
     - restart ypserv
   when:
-    - ( ansible_virtualization_type != "docker" and nis_manage_networkmanager )
+    - ( ansible_virtualization_type != "docker" and nis_manage_networkmanager|bool )
     - reg_nm.stat.exists
 
 - name: enable and start yp server daemons
@@ -115,7 +115,7 @@
     name: "{{ item }}"
     enabled: yes
     state: started
-  when: nis_server
+  when: nis_server|bool
   with_items: "{{ nis_server_daemons }}"
   notify:
     - restart ypserv
@@ -131,19 +131,19 @@
     owner: root
     mode: "0644"
     group: root
-  when: not nis_server
+  when: not nis_server|bool
 
 - name: enable and start ypbind
   service:
     name: ypbind
     enabled: yes
     state: started
-  when: not nis_server
+  when: not nis_server|bool
 
 - name: enable and start nscd
   service:
     name: nscd
     enabled: "{{ nis_nscd_enabled }}"
     state: "{{ nis_nscd_state }}"
-  when: nis_manage_nscd
+  when: nis_manage_nscd|bool
 
