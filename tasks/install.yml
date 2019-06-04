@@ -49,7 +49,7 @@
   template:
     src: securenets.j2
     dest: /var/yp/securenets
-  when: nis_serveri|bool
+  when: nis_server|bool
   notify:
     - restart rpcbind
     - restart ypserv
