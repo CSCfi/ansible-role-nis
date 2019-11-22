@@ -101,7 +101,7 @@
   service:
     name: NetworkManager
     enabled: "{{ nis_nm_enabled }}"
-    state: "{{ nis_nm_state }}"
+    state: "{{ nis_nm_state }}"
   notify:
     - restart rpcbind
     - restart ypbind
